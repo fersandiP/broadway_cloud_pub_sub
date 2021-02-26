@@ -122,6 +122,7 @@ defmodule BroadwayCloudPubSub.Acknowledger do
   defp ack_messages(actions_and_ids, config) do
     Enum.each(actions_and_ids, fn {action, ack_ids} ->
       ack_ids
+      |> Enum.map(fn id -> id.ack_id end)
       |> Enum.chunk_every(@max_ack_ids_per_request)
       |> Enum.each(&apply_ack_func(action, &1, config))
     end)
